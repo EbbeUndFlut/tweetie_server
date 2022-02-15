@@ -64,15 +64,29 @@ const User = require("../models/userModel");
             });
         } else {
             res.status(401);
-            throw new Error("Invalid user credentials!")
+            throw new Error("Invalid user credentials!");
         }
 
     });
 
+// Derzeitigen User abrufen
+// api/users/currentuser
+// beschränkter Zugriff
+
+const getCurrentUser = asyncHandler(async (req,res) => {
+
+    const user= {
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name
+    };
+
+    res.status(200).json(user);
+})
 //Token generieren
 const generateToken = (id) => {
     // sign method, id, jwt secret
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d"})
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d"});
 }
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, getCurrentUser };
