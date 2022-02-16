@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const User = require("../models/userModel");
 
 // Neuen User anmelden
@@ -8,6 +9,8 @@ const User = require("../models/userModel");
 // nicht geschützt
 const registerUser = asyncHandler(async (req, res) => {
 	const { name, email, password } = req.body;
+	const profilepic = req.file
+	console.log(profilepic)
 	//Felder nicht ausgefüllt?
 	if (!name || !email || !password) {
 		res.status(400);
@@ -29,6 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
 	const user = await User.create({
 		name,
 		email,
+		profilepic: profilepic.filename,
 		password: hashedPassword,
 	});
 
@@ -42,6 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
 				_id: user._id,
 				name: user.name,
 				email: user.email,
+				profilepic: user.profilepic,
 			});
 	} else {
 		res.status(400);
@@ -67,6 +72,7 @@ const loginUser = asyncHandler(async (req, res) => {
 				_id: user._id,
 				name: user.name,
 				email: user.email,
+				profilepic: user.profilepic
 			});
 	} else {
 		res.status(401);
