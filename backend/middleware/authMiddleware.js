@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 const protectRoute = asyncHandler(async (req, res, next) => {
     //httpOnly Cookie auslesen
     let token;
-    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    if(req.cookies.TweetieToken) {
         
         try{
             //Token vom Header holen
