@@ -3,13 +3,13 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 
 const protectRoute = asyncHandler(async (req, res, next) => {
-    //Bearer Token
+    //httpOnly Cookie auslesen
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
         
         try{
             //Token vom Header holen
-            token = req.headers.authorization.split(" ")[1];
+            token = req.cookies.TweetieToken
             //Token verifizieren
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = await User.findById(decoded.id).select("-password");
