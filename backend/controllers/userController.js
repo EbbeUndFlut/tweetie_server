@@ -39,8 +39,10 @@ const registerUser = asyncHandler(async (req, res) => {
 	if (user) {
 		res.status(201)
 			.cookie("TweetieToken", generateToken(user._id), {
-				maxAge: 36_000_000,
 				httpOnly: true,
+				sameSite: 'strict',
+				secure: true,
+				path: '/',
 			})
 			.json({
 				_id: user._id,
@@ -65,8 +67,10 @@ const loginUser = asyncHandler(async (req, res) => {
 	if (user && (await bcrypt.compare(password, user.password))) {
 		res.status(200)
 			.cookie("TweetieToken", generateToken(user._id), {
-				maxAge: 36_000_000,
 				httpOnly: true,
+				sameSite: 'strict',
+				secure: true,
+				path: '/',
 			})
 			.json({
 				_id: user._id,
@@ -89,6 +93,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 		id: req.user._id,
 		email: req.user.email,
 		name: req.user.name,
+		profilepic: req.user.profilepic,
 	};
 
 	res.status(200).json(user);
