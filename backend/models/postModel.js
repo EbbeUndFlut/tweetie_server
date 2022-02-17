@@ -9,3 +9,4 @@ const postSchema = mongoose.Schema({
 	comments: {type: Number},
 	parentPostId: {type: String}
 })
+module.exports = mongoose.model('Post', postSchema)
