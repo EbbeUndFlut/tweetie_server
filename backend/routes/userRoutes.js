@@ -12,9 +12,9 @@ router.get("/currentuser", protectRoute, getCurrentUser)
 
 // Logout DELETE COOKIE
 router.get('/logout', (req, res) => {
-    //DELETING username COOKIE
+    //DELETING TweetieToken COOKIE
     res.clearCookie('TweetieToken');
-    // REDIRECT OT HOME
+    // REDIRECT To Login
     res.redirect('/');
 });
 
