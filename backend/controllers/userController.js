@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const {generateURL} = require('../config/s3')
 
 const User = require("../models/userModel");
 
@@ -8,10 +9,9 @@ const User = require("../models/userModel");
 // route /api/users/
 // nicht geschützt
 const registerUser = asyncHandler(async (req, res) => {
-	const { name, email, password } = req.body;
-	const profilepic = req.file
-	console.log(profilepic)
+	const { name, email, password,picurl } = req.body;
 	//Felder nicht ausgefüllt?
+	console.log(name, email, password, picurl)
 	if (!name || !email || !password) {
 		res.status(400);
 		throw new Error("Please fill out all fields!");
@@ -32,7 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
 	const user = await User.create({
 		name,
 		email,
-		profilepic: profilepic.filename,
+		profilepic: picurl,
 		password: hashedPassword,
 	});
 
@@ -55,6 +55,12 @@ const registerUser = asyncHandler(async (req, res) => {
 		throw new error("Invalid user data!");
 	}
 });
+
+const getSignedUrl = asyncHandler(async(req, res) => {
+	const name = req.query.imgname
+	const url = await generateURL(name)
+	res.status(200).json({url})
+})
 
 // User einloggen
 // route /api/users/login
@@ -104,4 +110,4 @@ const generateToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-module.exports = { registerUser, loginUser, getCurrentUser };
+module.exports = { registerUser, loginUser, getCurrentUser,getSignedUrl };
