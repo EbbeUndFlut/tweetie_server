@@ -25,10 +25,18 @@ const createPost =async (req, res) => {
 
 const getPosts = async (req, res) => {
 	const posts =  await Post.find().populate('creator')
-	console.log('Was ist in Posts:',posts)
 	res.status(200).json(posts)
 }
+
+const getPost = async (req, res) => {
+	const id = req.params.id
+	const post = await Post.findOne({_id : id}).populate('creator')
+	console.log('Der Post:',post)
+	res.status(200).json(post)
+}
+
 module.exports = {
 	createPost,
 	getPosts,
+	getPost,
 };
