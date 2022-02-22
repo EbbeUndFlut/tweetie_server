@@ -1,9 +1,9 @@
 const aws = require("aws-sdk");
 const {randomBytes} = require('crypto')
-const region = "eu-central-1";
-const bucketName = "tweetie";
-const accessKeyId = "AKIAQOTBFH6HAK2GT7XU";
-const secretAccessKey = "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";
+const region = proccess.env.AWS_BUCKET_REGION;
+const bucketName = process.env.AWS_BUCKET_REGION;
+const accessKeyId = process.env.AWS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
 
 const s3 = new aws.S3({
 	region,
