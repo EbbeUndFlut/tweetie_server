@@ -2,8 +2,6 @@ const Post = require("../models/postModel");
 
 const createPost =async (req, res) => {
 	const { text } = req.body
-	console.log('der body:', req.body)
-	console.log('der text:', text)
 	const date = Date.now()
 	const creator = req.user.id
 	const likes = 0
@@ -35,8 +33,17 @@ const getPost = async (req, res) => {
 	res.status(200).json(post)
 }
 
+const searchPosts = async (req, res) => {
+	const search = req.query.search
+	console.log(search)
+	const posts = await Post.find({text:{$regex:search,$options: 'i'}}).populate('creator')
+	console.log('das steht in post:', posts)
+	res.status(200).json(posts)
+}
+
 module.exports = {
 	createPost,
 	getPosts,
 	getPost,
+	searchPosts,
 };

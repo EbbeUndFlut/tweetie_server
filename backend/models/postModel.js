@@ -10,4 +10,5 @@ const postSchema = mongoose.Schema({
 	comments: { type: Number },
 	parentPostId: { type: String },
 });
+postSchema.index({text:'text'})
 module.exports = mongoose.model("Post", postSchema);
