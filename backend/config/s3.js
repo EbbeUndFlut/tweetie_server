@@ -1,6 +1,6 @@
 const aws = require("aws-sdk");
 const {randomBytes} = require('crypto')
-const region = proccess.env.AWS_BUCKET_REGION;
+const region = process.env.AWS_BUCKET_REGION;
 const bucketName = process.env.AWS_BUCKET_REGION;
 const accessKeyId = process.env.AWS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
