@@ -1,8 +1,9 @@
+const {ObjectId} = require("mongodb");
 const Post = require("../models/postModel");
 
 const createPost = async (req, res) => {
 	const { text, parentPostId } = req.body;
-	console.log('PARENTPOST:',parentPostId)
+	console.log("PARENTPOST:", parentPostId);
 	const date = Date.now();
 	const creator = req.user.id;
 	const likes = 0;
@@ -16,6 +17,11 @@ const createPost = async (req, res) => {
 		parentPostId,
 	});
 	console.log(post);
+	if (parentPostId)
+		await Post.findOneAndUpdate(
+			{ _id: parentPostId },
+			{ $inc: { comments: 1 } }
+		);
 	if (post) {
 		res.status(201).end();
 	} else {
@@ -24,7 +30,9 @@ const createPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-	const posts = await Post.find({parentPostId:{$exists:false}}).populate("creator");
+	const posts = await Post.find({
+		parentPostId: { $exists: false },
+	}).populate("creator");
 	res.status(200).json(posts);
 };
 
@@ -45,9 +53,31 @@ const searchPosts = async (req, res) => {
 	res.status(200).json(posts);
 };
 
+const getConversation = async (req, res) => {
+	const { parentId } = req.body;
+	console.log("HHEHEHEHEHEHEHEHHEH", parentId);
+	const posts = await Post.aggregate([
+		{
+			$match: {
+				_id: ObjectId(parentId),
+			},
+		},
+		{
+			$lookup: {
+				from: "posts",
+				localField: "_id",
+				foreignField: "parentPostId",
+				as: "comments",
+			},
+		},
+	]);
+	res.status(200).json(posts);
+};
+
 module.exports = {
 	createPost,
 	getPosts,
 	getPost,
 	searchPosts,
+	getConversation,
 };
