@@ -8,7 +8,7 @@ const postSchema = mongoose.Schema({
 	creator: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
 	likes: { type: Number },
 	comments: { type: Number },
-	parentPostId: { type: String },
+	parentPostId: { type: mongoose.SchemaTypes.ObjectId, ref: "Post" },
 });
-postSchema.index({text:'text'})
+postSchema.index({ text: "text" });
 module.exports = mongoose.model("Post", postSchema);
