@@ -1,4 +1,4 @@
-const {ObjectId} = require("mongodb");
+const { ObjectId } = require("mongodb");
 const Post = require("../models/postModel");
 
 const createPost = async (req, res) => {
@@ -69,7 +69,15 @@ const getConversation = async (req, res) => {
 				as: "comments",
 			},
 		},
-	]).populate("creator");
+		{
+			$lookup: {
+				from: "users",
+				localField: "creator",
+				foreignField: "_id",
+				as: "boy",
+			},
+		},
+	]);
 	res.status(200).json(posts);
 };
 
