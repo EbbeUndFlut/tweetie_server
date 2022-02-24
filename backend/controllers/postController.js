@@ -55,7 +55,6 @@ const searchPosts = async (req, res) => {
 
 const getConversation = async (req, res) => {
 	const { parentId } = req.body;
-	console.log("HHEHEHEHEHEHEHEHHEH", parentId);
 	const posts = await Post.aggregate([
 		{
 			$match: {
@@ -70,7 +69,7 @@ const getConversation = async (req, res) => {
 				as: "comments",
 			},
 		},
-	]);
+	]).populate("creator");
 	res.status(200).json(posts);
 };
 
