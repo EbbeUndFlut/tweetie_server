@@ -41,7 +41,6 @@ const registerUser = asyncHandler(async (req, res) => {
 			.cookie("TweetieToken", generateToken(user._id), {
 				httpOnly: true,
 				secure: true,
-				domain:'opafritz.tech',
 				sameSite: 'none',
 				path: '/',
 			})
@@ -75,7 +74,6 @@ const loginUser = asyncHandler(async (req, res) => {
 		res.status(200)
 			.cookie("TweetieToken", generateToken(user._id), {
 				httpOnly: true,
-				domain:'opafritz.tech',
 				sameSite: 'none',
 				secure: true,
 				path: '/',
