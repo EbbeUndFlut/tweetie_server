@@ -7,6 +7,7 @@ const {
 	getPost,
 	searchPosts,
 	getConversation,
+	setAsFav,
 } = require("../controllers/postController");
 
 router.use(protectRoute);
@@ -15,5 +16,6 @@ router.get("/search", searchPosts);
 router.get("/:id", getPost);
 router.post("/", createPost);
 router.post("/conversation", getConversation)
+router.post("/fav", setAsFav)
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const { ObjectId } = require("mongodb");
+const Fav = require("../models/favModel");
 const Post = require("../models/postModel");
 
 const createPost = async (req, res) => {
@@ -80,6 +81,33 @@ const getConversation = async (req, res) => {
 	]);
 	res.status(200).json(posts);
 };
+const setAsFav = async (req, res) => {
+	const userId = req.user._id;
+	const favId = req.body.favId;
+	const isFav = req.body.isFav;
+	console.log('Was ist drin:',isFav)
+	if (isFav) {
+		await Post.updateOne(
+			{ _id: ObjectId(favId) },
+			{ $inc: { likes: 1 } }
+		);
+
+		const result = await Fav.updateOne(
+			{ user: userId },
+			{ $push: { favorites: [ObjectId(favId)] } }
+		);
+		if (result.modifiedCount == 0) {
+			const result = await Fav.create({
+				user: userId,
+				favorites: [ObjectId(favId)],
+			});
+			console.log("nach unseren create:", result);
+			res.status(201).end();
+		}
+
+		res.status(200).end();
+	}
+};
 
 module.exports = {
 	createPost,
@@ -87,4 +115,5 @@ module.exports = {
 	getPost,
 	searchPosts,
 	getConversation,
+	setAsFav,
 };
