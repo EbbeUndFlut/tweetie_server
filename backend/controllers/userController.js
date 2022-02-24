@@ -40,7 +40,6 @@ const registerUser = asyncHandler(async (req, res) => {
 		res.status(201)
 			.cookie("TweetieToken", generateToken(user._id), {
 				httpOnly: true,
-				sameSite: 'strict',
 				secure: true,
 				path: '/',
 			})
@@ -74,7 +73,6 @@ const loginUser = asyncHandler(async (req, res) => {
 		res.status(200)
 			.cookie("TweetieToken", generateToken(user._id), {
 				httpOnly: true,
-				sameSite: 'strict',
 				secure: true,
 				path: '/',
 			})
