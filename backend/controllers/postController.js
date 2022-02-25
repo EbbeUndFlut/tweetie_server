@@ -56,36 +56,21 @@ const searchPosts = async (req, res) => {
 
 const getConversation = async (req, res) => {
 	const { parentId } = req.body;
-	const posts = await Post.aggregate([
-		{
-			$match: {
-				_id: ObjectId(parentId),
-			},
-		},
-		{
-			$lookup: {
-				from: "posts",
-				localField: "_id",
-				foreignField: "parentPostId",
-				as: "comments",
-			},
-		},
-		{
-			$lookup: {
-				from: "users",
-				localField: "creator",
-				foreignField: "_id",
-				as: "boy",
-			},
-		},
-	]);
-	res.status(200).json(posts);
+	const post = await Post.findOne({ _id: ObjectId(parentId) }).populate(
+		"creator"
+	);
+	console.log('DER POST:', post)
+	const comments = await Post.find({
+		parentPostId: ObjectId(parentId),
+	}).populate("creator");
+	console.log('Die Comments:', comments)
+	res.status(200).json({ post, comments });
 };
 const setAsFav = async (req, res) => {
 	const userId = req.user._id;
 	const favId = req.body.favId;
 	const isFav = req.body.isFav;
-	console.log('Was ist drin:',isFav)
+	console.log("Was ist drin:", isFav);
 	if (isFav) {
 		await Post.updateOne(
 			{ _id: ObjectId(favId) },
